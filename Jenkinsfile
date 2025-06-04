@@ -1,38 +1,26 @@
 pipeline {
-  agent any
-
+  agent {
+    kubernetes {
+      yamlFile 'kaniko-pod.yaml'
+    }
+  }
   environment {
-    DOCKER_IMAGE = "headroaster/rlcraft"
-    DOCKER_TAG = "latest"
-    REGISTRY_CREDENTIALS = credentials('dockerhub-credentials')
+    IMAGE_NAME = 'headroaster/rlcraft:latest'
   }
-
   stages {
-    stage('Build Docker Image') {
+    stage('Build and Push with Kaniko') {
       steps {
-        sh 'docker build -t $DOCKER_IMAGE:$DOCKER_TAG .'
+        container('kaniko') {
+          sh '''
+            /kaniko/executor \
+              --dockerfile=Dockerfile \
+              --context=`pwd` \
+              --destination=${IMAGE_NAME} \
+              --insecure \
+              --skip-tls-verify
+          '''
+        }
       }
-    }
-
-    stage('Push Docker Image') {
-      steps {
-        sh """
-          echo $REGISTRY_CREDENTIALS_PSW | docker login -u $REGISTRY_CREDENTIALS_USR --password-stdin
-          docker push $DOCKER_IMAGE:$DOCKER_TAG
-        """
-      }
-    }
-
-    stage('Deploy to Kubernetes') {
-      steps {
-        sh 'kubectl apply -f k8s/'
-      }
-    }
-  }
-
-  post {
-    failure {
-      echo "Deployment failed!"
     }
   }
 }
