@@ -15,15 +15,7 @@ pipeline {
   stages {
     stage('Build and Push with Kaniko') {
       steps {
-        container('kaniko') {
-          sh '''
-            /kaniko/executor \
-              --dockerfile=/workspace/Dockerfile \
-              --context=dir:///workspace \
-              --destination=$DOCKER_IMAGE:$DOCKER_TAG \
-              --verbosity=info
-          '''
-        }
+        container('kaniko') {}
       }
     }
 
