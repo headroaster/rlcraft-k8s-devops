@@ -8,8 +8,7 @@ spec:
   containers:
     - name: kaniko
       image: gcr.io/kaniko-project/executor:latest
-      command:
-        - /kaniko/executor
+      command: ["/kaniko/executor"]
       args:
         - "--dockerfile=/workspace/Dockerfile"
         - "--context=dir:///workspace"
@@ -17,7 +16,7 @@ spec:
         - "--verbosity=info"
       volumeMounts:
         - name: kaniko-secret
-          mountPath: /kaniko/.docker/
+          mountPath: /kaniko/.docker
         - name: workspace-volume
           mountPath: /workspace
   volumes:
