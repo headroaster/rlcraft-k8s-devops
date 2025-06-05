@@ -8,6 +8,7 @@ spec:
   containers:
     - name: kaniko
       image: gcr.io/kaniko-project/executor:latest
+      command: ["/busybox/sleep", "infinity"]  # This keeps the pod alive
       volumeMounts:
         - name: kaniko-secret
           mountPath: /kaniko/.docker/
