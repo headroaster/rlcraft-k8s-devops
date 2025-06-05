@@ -6,25 +6,21 @@ metadata:
 spec:
   restartPolicy: Never
   containers:
-  - name: kaniko
-    image: gcr.io/kaniko-project/executor:latest
-    command:
-      - /kaniko/executor
-    args:
-      - "--dockerfile=Dockerfile"
-      - "--context=dir:///workspace"
-      - "--destination=docker.io/headroaster/rlcraft-server:latest"
-      - "--verbosity=info"
-    workingDir: /workspace  
-    volumeMounts:
-      - name: kaniko-secret
-        mountPath: /kaniko/.docker/
-      - name: workspace-volume
-        mountPath: /workspace
+    - name: kaniko
+      image: gcr.io/kaniko-project/executor:latest
+      command: ["/busybox/sh", "-c"]
+      args:
+        - >
+          ls -la && /kaniko/executor
+          --dockerfile=Dockerfile
+          --context=dir://.
+          --destination=docker.io/headroaster/rlcraft-server:latest
+          --verbosity=info
+      volumeMounts:
+        - name: kaniko-secret
+          mountPath: /kaniko/.docker/
   volumes:
     - name: kaniko-secret
       secret:
         secretName: dockerhub-credentials
-    - name: workspace-volume
-      emptyDir: {}
 
