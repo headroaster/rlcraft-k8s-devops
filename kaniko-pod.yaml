@@ -12,15 +12,19 @@ spec:
       - /kaniko/executor
     args:
       - "--dockerfile=Dockerfile"
-      - "--context=dir://."
+      - "--context=dir:///workspace"
       - "--destination=docker.io/headroaster/rlcraft-server:latest"
       - "--verbosity=info"
     workingDir: /workspace  
     volumeMounts:
       - name: kaniko-secret
         mountPath: /kaniko/.docker/
+      - name: workspace-volume
+        mountPath: /workspace
   volumes:
     - name: kaniko-secret
       secret:
         secretName: dockerhub-credentials
+    - name: workspace-volume
+      emptyDir: {}
 
