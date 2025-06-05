@@ -3,10 +3,6 @@ pipeline {
     kubernetes {
       yamlFile 'kaniko-pod.yaml'
       defaultContainer 'kaniko'
-      workspaceVolume emptyDirWorkspaceVolume()
-      volumes {
-        emptyDirVolume(mountPath: '/workspace', memory: false)
-      }
     }
   }
 
