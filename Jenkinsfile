@@ -2,25 +2,40 @@ pipeline {
   agent {
     kubernetes {
       yamlFile 'kaniko-pod.yaml'
+      defaultContainer 'kaniko'
     }
   }
+
   environment {
-    IMAGE_NAME = 'headroaster/rlcraft:latest'
+    DOCKER_IMAGE = "docker.io/headroaster/rlcraft-server"
+    DOCKER_TAG = "latest"
   }
+
   stages {
     stage('Build and Push with Kaniko') {
       steps {
         container('kaniko') {
           sh '''
             /kaniko/executor \
-              --dockerfile=Dockerfile \
-              --context=`pwd` \
-              --destination=${IMAGE_NAME} \
-              --insecure \
-              --skip-tls-verify
+              --dockerfile=/workspace/Dockerfile \
+              --context=dir://workspace \
+              --destination=$DOCKER_IMAGE:$DOCKER_TAG \
+              --verbosity=info
           '''
         }
       }
+    }
+
+    stage('Deploy to Kubernetes') {
+      steps {
+        sh 'kubectl apply -f k8s/'
+      }
+    }
+  }
+
+  post {
+    failure {
+      echo "Deployment failed!"
     }
   }
 }

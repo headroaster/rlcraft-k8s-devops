@@ -1,0 +1,12 @@
+pipeline {
+  agent { label 'default-agent' }
+  stages {
+    stage('Clone Repo') {
+      steps {
+        checkout scm
+        echo '✅ Repository cloned!'
+      }
+    }
+  }
+}
+
