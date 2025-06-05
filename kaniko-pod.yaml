@@ -8,16 +8,11 @@ spec:
   containers:
     - name: kaniko
       image: gcr.io/kaniko-project/executor:latest
-      command:
-        - "/busybox/sh"
       args:
-        - "-c"
-        - >
-          /kaniko/executor
-          --dockerfile=/workspace/Dockerfile
-          --context=dir:///workspace
-          --destination=docker.io/headroaster/rlcraft-server:latest
-          --verbosity=info
+        - "--dockerfile=/workspace/Dockerfile"
+        - "--context=dir:///workspace"
+        - "--destination=docker.io/headroaster/rlcraft-server:latest"
+        - "--verbosity=info"
       volumeMounts:
         - name: kaniko-secret
           mountPath: /kaniko/.docker
