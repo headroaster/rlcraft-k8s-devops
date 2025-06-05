@@ -18,7 +18,7 @@ pipeline {
           sh '''
             /kaniko/executor \
               --dockerfile=/workspace/Dockerfile \
-              --context=dir://workspace \
+              --context=dir:///workspace \
               --destination=$DOCKER_IMAGE:$DOCKER_TAG \
               --verbosity=info
           '''
