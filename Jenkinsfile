@@ -3,6 +3,7 @@ pipeline {
     kubernetes {
       yamlFile 'kaniko-pod.yaml'
       defaultContainer 'kaniko'
+      workspaceVolume emptyDirWorkspaceVolume()
     }
   }
 
@@ -12,21 +13,13 @@ pipeline {
   }
 
   stages {
-    stage('Verify workspace') {
-      steps {
-        container('kaniko') {
-          sh 'ls -la && cat Dockerfile || echo "No Dockerfile found"'
-        }
-      }
-    }
-
     stage('Build and Push with Kaniko') {
       steps {
         container('kaniko') {
           sh '''
             /kaniko/executor \
-              --dockerfile=Dockerfile \
-              --context=dir://. \
+              --dockerfile=/workspace/Dockerfile \
+              --context=dir:///workspace \
               --destination=$DOCKER_IMAGE:$DOCKER_TAG \
               --verbosity=info
           '''
