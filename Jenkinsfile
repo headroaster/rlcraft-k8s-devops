@@ -3,7 +3,7 @@ pipeline {
     kubernetes {
       yamlFile 'kaniko-pod.yaml'
       defaultContainer 'kaniko'
-      workspaceVolume emptyDirWorkspaceVolume()  // This line is essential
+      workspaceVolume hostPathWorkspaceVolume('/home/jenkins/agent')
     }
   }
 
