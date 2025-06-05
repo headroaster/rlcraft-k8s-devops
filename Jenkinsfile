@@ -4,6 +4,9 @@ pipeline {
       yamlFile 'kaniko-pod.yaml'
       defaultContainer 'kaniko'
       workspaceVolume emptyDirWorkspaceVolume()
+      volumes {
+        emptyDirVolume(mountPath: '/workspace', memory: false)
+      }
     }
   }
 
@@ -15,7 +18,15 @@ pipeline {
   stages {
     stage('Build and Push with Kaniko') {
       steps {
-        container('kaniko') {}
+        container('kaniko') {
+          sh '''
+            /kaniko/executor \
+              --dockerfile=/workspace/Dockerfile \
+              --context=dir:///workspace \
+              --destination=$DOCKER_IMAGE:$DOCKER_TAG \
+              --verbosity=info
+          '''
+        }
       }
     }
 
