@@ -2,26 +2,15 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: kaniko
-  namespace: jenkins
 spec:
-  restartPolicy: Never
   containers:
     - name: kaniko
       image: gcr.io/kaniko-project/executor:latest
-      args:
-        - "--dockerfile=/workspace/Dockerfile"
-        - "--context=dir:///workspace"
-        - "--destination=docker.io/headroaster/rlcraft-server:latest"
-        - "--verbosity=info"
       volumeMounts:
         - name: kaniko-secret
           mountPath: /kaniko/.docker
-        - name: workspace-volume
-          mountPath: /workspace
   volumes:
     - name: kaniko-secret
       secret:
         secretName: dockerhub-credentials
-    - name: workspace-volume
-      emptyDir: {}
 
