@@ -13,13 +13,21 @@ pipeline {
   }
 
   stages {
-    stage('Build Image') {
+    stage('Build and Push with Kaniko') {
       steps {
-        echo 'Kaniko container should build and push automatically on startup.'
+        container('kaniko') {
+          sh '''
+            /kaniko/executor \
+              --dockerfile=/workspace/Dockerfile \
+              --context=dir:///workspace \
+              --destination=$DOCKER_IMAGE:$DOCKER_TAG \
+              --verbosity=info
+          '''
+        }
       }
     }
 
-    stage('Deploy') {
+    stage('Deploy to Kubernetes') {
       steps {
         sh 'kubectl apply -f k8s/'
       }
@@ -28,7 +36,7 @@ pipeline {
 
   post {
     failure {
-      echo "Pipeline failed."
+      echo "Deployment failed!"
     }
   }
 }
