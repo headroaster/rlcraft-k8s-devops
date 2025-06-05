@@ -15,6 +15,7 @@ spec:
       - "--context=dir://."
       - "--destination=docker.io/headroaster/rlcraft-server:latest"
       - "--verbosity=info"
+    workingDir: /workspace  
     volumeMounts:
       - name: kaniko-secret
         mountPath: /kaniko/.docker/
