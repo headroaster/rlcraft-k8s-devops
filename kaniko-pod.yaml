@@ -22,7 +22,7 @@ spec:
     - name: workspace-volume
       mountPath: /home/jenkins/agent
   - name: kubectl
-    image: bitnami/kubectl:1.27.4
+    image: bitnami/kubectl:latest-debian-11
     command:
     - sh
     - -c
