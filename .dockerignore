@@ -6,7 +6,6 @@ crash-reports/
 world/
 *.log
 *.zip
-*.jar
 *.db
 *.tar.gz
 *.bak
