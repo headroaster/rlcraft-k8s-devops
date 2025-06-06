@@ -28,6 +28,9 @@ spec:
     - name: docker-config
       secret:
         secretName: dockerhub-credentials
+        items:
+          - key: .dockerconfigjson
+            path: config.json
     - name: workspace-volume
       emptyDir: {}
 
