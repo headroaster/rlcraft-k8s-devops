@@ -12,6 +12,19 @@ pipeline {
   }
 
   stages {
+    stage('Debug Kaniko Auth') {
+      steps {
+        container('kaniko') {
+          sh '''
+            echo ">>> Listing /kaniko/.docker/"
+            ls -lah /kaniko/.docker
+
+        echo ">>> Printing /kaniko/.docker/config.json"
+        cat /kaniko/.docker/config.json || echo "Missing config.json"
+      '''
+    }
+  }
+}
     stage('Build and Push with Kaniko') {
       steps {
         container('kaniko') {
