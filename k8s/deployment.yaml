@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rlcraft-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rlcraft-server
+  template:
+    metadata:
+      labels:
+        app: rlcraft-server
+    spec:
+      containers:
+      - name: rlcraft
+        image: headroaster/rlcraft-server:latest
+        ports:
+        - containerPort: 25565
+        volumeMounts:
+        - mountPath: /minecraft
+          name: minecraft-data
+      volumes:
+      - name: minecraft-data
+        persistentVolumeClaim:
+          claimName: minecraft-pvc
+
