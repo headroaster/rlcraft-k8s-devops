@@ -2,8 +2,7 @@ pipeline {
   agent {
     kubernetes {
       yamlFile 'kaniko-pod.yaml'
-      defaultContainer 'kaniko'
-      workspaceVolume emptyDirWorkspaceVolume()
+      defaultContainer 'jnlp'
     }
   }
 
