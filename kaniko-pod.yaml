@@ -4,19 +4,26 @@ metadata:
   name: kaniko
   namespace: jenkins
 spec:
+  serviceAccountName: jenkins  # ✅ Must be directly under `spec`
   restartPolicy: Never
   containers:
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
       command:
-      - sh
-      - -c
-      - "sleep infinity"
+        - sh
+        - -c
+        - "sleep infinity"
+      tty: true
       volumeMounts:
         - name: docker-config
           mountPath: /kaniko/.docker
         - name: workspace-volume
           mountPath: /workspace
+    - name: jnlp
+      image: jenkins/inbound-agent:latest
+      volumeMounts:
+        - name: workspace-volume
+          mountPath: /home/jenkins/agent
   volumes:
     - name: docker-config
       secret:
