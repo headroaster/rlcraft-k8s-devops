@@ -24,7 +24,7 @@ pipeline {
         container('kaniko') {
           sh '''
             /kaniko/executor \
-              --dockerfile=/home/jenkins/agent/workspace/Dockerfile \
+              --dockerfile=/home/jenkins/agent/workspace/roastcraft rlcraft/Dockerfile \
               --context=dir:///home/jenkins/agent/workspace \
               --destination=docker.io/headroaster/rlcraft-server:latest \
               --verbosity=info
