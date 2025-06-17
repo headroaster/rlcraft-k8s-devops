@@ -6,6 +6,19 @@ pipeline {
   }
 
   stages {
+    stage('Debug Workspace') {
+      steps {
+        container('kaniko') {
+          sh '''
+            echo "WORKSPACE:"
+            ls -alh /home/jenkins/agent/workspace
+            echo "Search for Dockerfile:"
+            find /home/jenkins/agent/workspace -name Dockerfile
+          '''
+        }
+      }
+    }
+
     stage('Build and Push Image') {
       steps {
         container('kaniko') {
