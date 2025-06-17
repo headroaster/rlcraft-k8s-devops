@@ -36,7 +36,7 @@ pipeline {
     stage('Deploy to Kubernetes') {
       steps {
         container('kubectl') {
-          sh 'kubectl apply -f /home/jenkins/agent/workspace/rlcraft-deploy/k8s/'
+          sh 'kubectl apply -f k8s/'
         }
       }
     }
